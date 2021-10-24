@@ -1,4 +1,7 @@
 import numpy as np
+import matplotlib.pylab as plt
+
+plt.ion()
 
 def getS(A):
     k = getKout(A)
@@ -43,11 +46,16 @@ def getG(S, alpha, v):
 
     return G
 
-def surf(G, P, epsilon = 1e-10):
+def surf(G, P, epsilon = 1e-10, plot=False):
     order = 0
     while(diff(G.dot(P),P) >= epsilon):
         P = G.dot(P)
         order += 1
+        if plot:
+            plt.clf()
+            plt.bar(range(len(P)),P,visible=True)
+            plt.draw()
+            plt.pause(.001)
     return P, order
 
 def diff(a,b):
@@ -78,16 +86,28 @@ epsilon = 1e-10
 alpha = 0.85
 G = getG(S, alpha, v)
 print(f"\n2.1)\n   > For a random surfer that start his journey on a random node and with a dumping facotr at {round(alpha,2)}, he have these chances to finish at each node:\n")
+plt.subplot(211)
 P, step = surf(G,P,epsilon)
 for i in range(len(P)):
     print(f"      Node {i} : {P[i]}")
 print(f"\n      This stability is reached after {step} steps")
 
 # 2.1 - 2
+plt.title(f"Position of the surfer fore alpha={round(alpha,2)}"); plt.xlabel("Node"); plt.ylabel("Probability")
 alpha = np.random.rand() / 2 + 0.5
+plt.subplot(212)
 G = getG(S, alpha, v)
 print(f"\n   > Now, if we change the dumping factor to {round(alpha,2)}, the surfer have these chances to finish at each node:\n")
-P, step = surf(G,P,epsilon)
+P, step = surf(G,P,epsilon,plot=True)
 for i in range(len(P)):
     print(f"      Node {i+1} : {P[i]}")
 print(f"\n      This stability is reached after {step} steps")
+
+plt.pause(999)
+
+
+#fig, ax = plt.subplot([],[])
+#fig.
+#fig.set_ydata(P)
+#fig.set_label("test")
+#plt.show()
