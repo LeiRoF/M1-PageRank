@@ -1,6 +1,12 @@
 import enum
 import numpy as np
+<<<<<<< HEAD
 from bokeh.plotting import figure, show
+=======
+import matplotlib.pylab as plt
+
+plt.ion()
+>>>>>>> dea08c74649bf68309af175a11331b53814b4559
 
 def getS(A):
     k = getKout(A)
@@ -44,15 +50,24 @@ def getG(S, alpha, v):
             G[i,j] = alpha * S[i,j] + (1-alpha) * v[i]
     return G
 
-def surf(G, P, epsilon = 1e-10):
+def surf(G, P, epsilon = 1e-10, plot=False):
     order = 0
     evolution = []
     evolution.append(P)
     while(diff(G.dot(P),P) >= epsilon):
         P = G.dot(P)
         order += 1
+<<<<<<< HEAD
         evolution.append(P)
     return P, order, evolution
+=======
+        if plot:
+            plt.clf()
+            plt.bar(range(len(P)),P,visible=True)
+            plt.draw()
+            plt.pause(.001)
+    return P, order
+>>>>>>> dea08c74649bf68309af175a11331b53814b4559
 
 def diff(a,b):
     res = 0
@@ -117,7 +132,12 @@ G = getG(S, alpha, v)
 print("S = \n", S)
 print("G = \n", G)
 print(f"\n2.1)\n   > For a random surfer that start his journey on a random node and with a dumping facotr at {round(alpha,2)}, he have these chances to finish at each node:\n")
+<<<<<<< HEAD
 P, step, evolution = surf(G,P,epsilon)
+=======
+plt.subplot(211)
+P, step = surf(G,P,epsilon)
+>>>>>>> dea08c74649bf68309af175a11331b53814b4559
 for i in range(len(P)):
     print(f"      Node {i+1} : {P[i]}")
 p.vbar(x= nodes-0.20, top=P, color="red", width=0.20, legend_label="PageRank centrality")
@@ -125,15 +145,25 @@ print(f"\n      This stability is reached after {step} steps")
 
 #__________________________________________________
 # 2.1 - 2
+<<<<<<< HEAD
 
+=======
+plt.title(f"Position of the surfer fore alpha={round(alpha,2)}"); plt.xlabel("Node"); plt.ylabel("Probability")
+>>>>>>> dea08c74649bf68309af175a11331b53814b4559
 alpha = np.random.rand() / 2 + 0.5
+plt.subplot(212)
 G = getG(S, alpha, v)
 print(f"\n   > Now, if we change the dumping factor to {round(alpha,2)}, the surfer have these chances to finish at each node:\n")
+<<<<<<< HEAD
 P, step, evolution = surf(G,P,epsilon)
+=======
+P, step = surf(G,P,epsilon,plot=True)
+>>>>>>> dea08c74649bf68309af175a11331b53814b4559
 for i in range(len(P)):
     print(f"      Node {i+1} : {P[i]}")
 print(f"\n      This stability is reached after {step} steps")
 
+<<<<<<< HEAD
 #__________________________________________________
 # 2.2 - 3
 
@@ -240,3 +270,13 @@ for i in graph:
 matrix = np.transpose(matrix)
 
 print(matrix)
+=======
+plt.pause(999)
+
+
+#fig, ax = plt.subplot([],[])
+#fig.
+#fig.set_ydata(P)
+#fig.set_label("test")
+#plt.show()
+>>>>>>> dea08c74649bf68309af175a11331b53814b4559
