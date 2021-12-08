@@ -99,18 +99,6 @@ def nprank(scores):
     
     return rank
 
-def nprank(scores):
-    rank = np.empty_like(scores)
-    i = 0
-
-    while len(scores) > 0:
-        index = np.where(scores == np.amin(scores))
-        scores = np.delete(scores, index)
-        rank[index] = i
-        i+=1
-    
-    return rank
-
 
 #######################
 # VARIABLE DEFINITION #
