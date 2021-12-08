@@ -86,6 +86,7 @@ def nprank(scores):
     ranks[temp] = np.arange(len(scores))
     return ranks
 '''
+# gives bad results
 
 def nprank(scores):
     rank = np.empty_like(scores)
@@ -98,6 +99,7 @@ def nprank(scores):
         i+=1
     
     return rank
+# gives the same bad results :/
 
 
 #######################
