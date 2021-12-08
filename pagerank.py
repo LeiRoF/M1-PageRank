@@ -310,8 +310,7 @@ p4.vbar(x= [x - 0.1 for x in types.keys()], top=P, bottom=0, color="green", widt
 
 D,_ = np.linalg.eig(G)
 D = np.absolute(D)
-
-print(D)
+D = D/np.sum(D)
 
 save_result("3-pokemon-pagerank.csv")
 
@@ -332,6 +331,7 @@ p4.vbar(x= [x + 0.1 for x in types.keys()], top=P, bottom=0, color="blue", width
 D,_ = np.linalg.eig(G)
 
 D = np.absolute(D)
+D = D/np.sum(D)
 
 save_result("3-pokemon-cheirank.csv")
 
