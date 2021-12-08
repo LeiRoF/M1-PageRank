@@ -76,13 +76,41 @@ def save_result(file):
         file.write(f"Rank, ID, Type, Power Iteration, Diagonalization\n")
         rank = nprank(P)
         for i, value in enumerate(P):
-            file.write(f"{rank[i]},{i+1},{types[i+1]},{step},{value}\n")
+            file.write(f"{rank[i]},{i+1},{types[i+1]}, {value}, {D[i]}\n")
 
 # Create a vector that contain the rank of each element of the vector given in parameter
+'''
 def nprank(scores):
-    order = scores.argsort()
-    ranks = order.argsort()
-    return np.flip(ranks)
+    temp = scores.argsort()
+    ranks = np.empty_like(temp)
+    ranks[temp] = np.arange(len(scores))
+    return ranks
+'''
+
+def nprank(scores):
+    rank = np.empty_like(scores)
+    i = 0
+
+    while len(scores) > 0:
+        index = np.where(scores == np.amin(scores))
+        scores = np.delete(scores, index)
+        rank[index] = i
+        i+=1
+    
+    return rank
+
+def nprank(scores):
+    rank = np.empty_like(scores)
+    i = 0
+
+    while len(scores) > 0:
+        index = np.where(scores == np.amin(scores))
+        scores = np.delete(scores, index)
+        rank[index] = i
+        i+=1
+    
+    return rank
+
 
 #######################
 # VARIABLE DEFINITION #
@@ -108,6 +136,7 @@ p1 = figure(title="ChaiRank for different P*",sizing_mode="stretch_both",x_axis_
 p2 = figure(title="Evolution of CheiRank vector over iterations",sizing_mode="stretch_both",y_axis_label="Probability",x_axis_label="Iteration")
 p3 = figure(title="Alpha influence",sizing_mode="stretch_both",x_axis_label="Node",y_axis_label="Probability")
 p4 = figure(title="Pokemon ranking",sizing_mode="stretch_both",x_axis_label="Pokemon type ID",y_axis_label="Value")
+p5 = figure(title="Test ranking",sizing_mode="stretch_both",x_axis_label="Type",y_axis_label="Value")
 output_file("results/plot.html")
 
 # Nodes (= websites)
@@ -291,6 +320,11 @@ plt.subplot(121)
 pokeplot(types, A, P)
 p4.vbar(x= [x - 0.1 for x in types.keys()], top=P, bottom=0, color="green", width=0.20, legend_label=f"PageRank vector")
 
+D,_ = np.linalg.eig(G)
+D = np.absolute(D)
+
+print(D)
+
 save_result("3-pokemon-pagerank.csv")
 
 #__________________________________________________
@@ -307,11 +341,23 @@ plt.subplot(122)
 pokeplot(types, A, P)
 p4.vbar(x= [x + 0.1 for x in types.keys()], top=P, bottom=0, color="blue", width=0.20, legend_label=f"CheiRank vector")
 
+D,_ = np.linalg.eig(G)
+
+D = np.absolute(D)
+
 save_result("3-pokemon-cheirank.csv")
 
 
 #__________________________________________________
 # Plot
+
+print("P = ")
+print(P)
+print("P.argsort() = ")
+print(P.argsort())
+
+p5.vbar([x for x in types.keys()], top=P, color="red", width=0.2, legend_label="")
+show(p5)
 
 show(p4)
 plt.show()
