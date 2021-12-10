@@ -6,6 +6,24 @@ import os
 import matplotlib.pyplot as plt
 import time
 from pokeplot import *
+from sys import argv
+
+try:
+    nodeFile = argv[1]
+    linkFile = argv[2]
+
+    if not os.path.isfile(nodeFile) or not os.path.isfile(linkFile):
+        raise
+
+except IndexError:
+    nodeFile = "data/nodes.txt"
+    linkFile = "data/links.txt"
+
+    if os.path.isfile(nodeFile) and os.path.isfile(linkFile):
+        print("No input file found, trying to run the program with default files.")
+    else:
+        print("[ERROR] No input file found.")
+        exit()
 
 ########################
 # FUNCTIONS DEFINITION #
@@ -79,27 +97,11 @@ def save_result(file):
             file.write(f"{rank[i]},{i+1},{types[i+1]}, {value}, {D[i]}\n")
 
 # Create a vector that contain the rank of each element of the vector given in parameter
-'''
 def nprank(scores):
-    temp = scores.argsort()
-    ranks = np.empty_like(temp)
-    ranks[temp] = np.arange(len(scores))
-    return ranks
-'''
-# gives bad results
-
-def nprank(scores):
+    sorted = (-scores).argsort()
     rank = np.empty_like(scores)
-    i = 0
-
-    while len(scores) > 0:
-        index = np.where(scores == np.amin(scores))
-        scores = np.delete(scores, index)
-        rank[index] = i
-        i+=1
-    
-    return rank
-# gives the same bad results :/
+    rank[sorted] = np.linspace(1,len(scores),num=len(scores))
+    return rank.astype(int)
 
 
 #######################
@@ -250,7 +252,7 @@ show(p1)
 
 # Getting types of pokemon
 types = {}
-with open("data/nodes.txt","r") as file:
+with open(nodeFile,"r") as file:
     for i,line in enumerate(file):
         line = line.replace("\n","")
         line = line.split("	")
@@ -263,7 +265,7 @@ with open("data/nodes.txt","r") as file:
 
 # Reading pokemon interactions file
 graph = []
-with open("data/links.txt","r") as attacks:
+with open(linkFile,"r") as attacks:
     for i, line in enumerate(attacks):
         line = line.replace("\n","")
         line = line.split("	")
